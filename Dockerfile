@@ -16,17 +16,9 @@ RUN curl -L --output cloudflared.deb https://github.com/cloudflare/cloudflared/r
     && rm -f cloudflared.deb
 
 # 创建 SSH 目录
-RUN mkdir /var/run/sshd \
+RUN mkdir -p /var/run/sshd \
     && mkdir -p /root/.ssh
 
-# 使用环境变量注入 SSH 公钥
-# 在运行容器时传入： -e SSH_PUBLIC_KEY="ssh-rsa AAAAB3Nza..."
-ENV SSH_PUBLIC_KEY=""
-
-# 将环境变量写入 authorized_keys
-RUN echo "$SSH_PUBLIC_KEY" > /root/.ssh/authorized_keys \
-    && chmod 600 /root/.ssh/authorized_keys \
-    && chmod 700 /root/.ssh
 
 # 复制启动脚本
 COPY start.sh /root/start.sh
