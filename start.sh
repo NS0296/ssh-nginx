@@ -12,6 +12,13 @@ if [ -z "$TUNNEL_TOKEN" ]; then
     exit 1
 fi
 
+# 使用环境变量注入 SSH 公钥
+# 在运行容器时传入： -e SSH_PUBLIC_KEY="ssh-rsa AAAAB3Nza..."
+# 将环境变量写入 authorized_keys
+echo "$SSH_PUBLIC_KEY" > /root/.ssh/authorized_keys
+chmod 600 /root/.ssh/authorized_keys
+chmod 700 /root/.ssh
+    
 # 启动 SSH 服务
 echo "🚀 启动 SSH 服务..."
 /usr/sbin/sshd -D &
